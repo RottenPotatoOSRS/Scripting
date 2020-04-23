@@ -73,21 +73,31 @@ public class HelperMethods {
 		return tiles;
 	}
 
+	public static void pathToArea(Area area, ClientContext ctx) {
+		StarterMinerConditions starterMinerConditions = new StarterMinerConditions(ctx);
+		ctx.movement.findPath(area.getRandomTile()).traverse();
+		randomSleep(400, 800);
+		// Did the player stop moving?
+		Condition.wait(new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				return !ctx.players.local().inMotion();
+			}
+		},400, 30);
+	}
+
+	/**
+	 * Uses the Condition.sleep() method to sleep a random number of seconds
+	 *
+	 * @param min the shortest possible sleep time
+	 * @param max the longest possible sleep time
+	 */
 	public static void randomSleep(int min, int max) {
-		java.util.Random rand = new Random();
+		Random rand = new Random();
 		int sleepTime = rand.nextInt(min + max) + min;
 		Condition.sleep(sleepTime);
 	}
 
-	public static boolean areaContainsTile(Tile[] area, Tile tile, ClientContext ctx) {
-		for (int i = 0; i < area.length; i++) {
-			if (area[i].x() == tile.x() &&
-					area[i].y() == tile.y() &&
-					area[i].floor() == tile.floor()) {
-				return true;
-			}
-		}
-		return false;
-	}
+
 
 }

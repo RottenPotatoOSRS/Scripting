@@ -9,7 +9,6 @@ import static starterMining.StarterMinerConstants.*;
 
 public class DropInventory extends Task {
 
-	StarterMinerConditions starterMinerConditions = new StarterMinerConditions(ctx);
 	StarterMinerComponents starterMinerComponents = new StarterMinerComponents(ctx);
 
 	public DropInventory(ClientContext ctx) { super(ctx); }

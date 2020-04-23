@@ -13,14 +13,6 @@ public class StarterMinerConditions extends ClientAccessor {
 
 	StarterMinerComponents starterMinerComponents = new StarterMinerComponents(ctx);
 
-	Callable<Boolean> pickaxeEquipped = new Callable<Boolean>() {
-		@Override
-		public Boolean call() throws Exception {
-			System.out.println(starterMinerComponents.weaponSlot.itemId());
-			return starterMinerComponents.weaponSlot.itemId() == bronzePickaxeId;
-		}
-	};
-
 	public StarterMinerConditions(ClientContext ctx) {
 		super(ctx);
 	}

@@ -16,6 +16,7 @@ public class StarterMiner extends PollingScript<ClientContext> implements PaintL
 	@Override
 	public void start() {
 		tasks.add(new DropInventory(ctx));
+		tasks.add(new WalkToMine(ctx));
 	}
 
 	@Override
