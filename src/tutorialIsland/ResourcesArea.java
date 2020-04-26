@@ -28,9 +28,11 @@ public class ResourcesArea extends Task {
     public void execute() {
         System.out.println("We are outside");
 
+        pathToArea(RESOURCE_AREA, ctx);
+
         // Talk to the survival expert
         Npc survivalExpert = getNpcWithID(true, survivalID, ctx);
-        talkTo(survivalExpert, ctx);
+        talkTo(true, survivalExpert, ctx);
         continueChat(ctx);
         tutorialComponents.continueItem.click();
 
@@ -51,7 +53,6 @@ public class ResourcesArea extends Task {
 
         System.out.println("Attempting to fish");
 
-        // TODO fishing takes long
         // Fish
         Item shrimp = fish(ctx);
         // Keep attempting to fish until we catch a shrimp
@@ -71,7 +72,7 @@ public class ResourcesArea extends Task {
             tabClicked = Condition.wait(tutorialConditions.skillReady, 200, 10);
         }
 
-        talkTo(survivalExpert, ctx);
+        talkTo(true, survivalExpert, ctx);
         continueChat(ctx);
         boolean woodcutReady = Condition.wait(tutorialConditions.woodcutReady, 300, 10);
         while (!woodcutReady) {
@@ -96,11 +97,16 @@ public class ResourcesArea extends Task {
 
         System.out.println("Attempting to cook");
         // Cook
-        cook(shrimp, fire);
+        cook(shrimp, fire, ctx);
         boolean shrimpCooked = Condition.wait(tutorialConditions.shrimpCooked, 500, 10);
         while (!shrimpCooked) {
-            cook(shrimp, fire);
+            cook(shrimp, fire, ctx);
             shrimpCooked = Condition.wait(tutorialConditions.shrimpCooked, 500, 10);
+        }
+        Item burntShrimp = getItemFromInventory(burntShrimpID, ctx);
+        while (burntShrimp != null) {
+            fishAndCook();
+            burntShrimp = getItemFromInventory(burntShrimpID, ctx);
         }
 
         System.out.println("Continuing to next area!");
@@ -108,5 +114,39 @@ public class ResourcesArea extends Task {
         openDoor(true, POST_RESOURCE_DOOR, gateID, ctx);
 
         System.out.println("Resource area completed!");
+    }
+
+    public Item fishAndCook() {
+        System.out.println("Attempting to fish");
+        Item shrimp = fish(ctx);
+        // Keep attempting to fish until we catch a shrimp
+        while(shrimp == null) {
+            shrimp = fish(ctx);
+        }
+
+        // Woodcut
+        System.out.println("Attempting to woodcut");
+        Item logs = woodcut(ctx);
+        while(logs == null) {
+            logs = woodcut(ctx);
+        }
+
+        System.out.println("Attempting to firemake");
+        // Firemake
+        GameObject fire = firemake(ctx);
+        while(fire == null) {
+            fire = firemake(ctx);
+        }
+
+        System.out.println("Attempting to cook");
+        // Cook
+        Item cookedShrimp = cook(shrimp, fire, ctx);
+        boolean shrimpCooked = Condition.wait(tutorialConditions.shrimpCooked, 500, 10);
+        while (!shrimpCooked) {
+            shrimp = cook(cookedShrimp, fire, ctx);
+            shrimpCooked = Condition.wait(tutorialConditions.shrimpCooked, 500, 10);
+        }
+
+        return shrimp;
     }
 }

@@ -31,26 +31,26 @@ public class MiningArea extends Task {
 
         // Talk to mining instructor
         Npc miningInstructor = getNpcWithID(true, miningID, ctx);
-        talkTo(miningInstructor, ctx);
+        talkTo(true, miningInstructor, ctx);
         continueChat(ctx);
-        boolean chatInvalid = Condition.wait(tutorialConditions.readyToMine, 300, 15);
-        while (!chatInvalid) {
+        boolean readyToMine = Condition.wait(tutorialConditions.readyToMine, 300, 15);
+        while (!readyToMine) {
             continueChat(ctx);
-            chatInvalid = Condition.wait(tutorialConditions.readyToMine, 300, 15);
+            readyToMine = Condition.wait(tutorialConditions.readyToMine, 300, 15);
         }
 
         // Mine tin
         System.out.println("Mining tin");
-        Item tinOre = mine(tinRockID, tinOreID, ctx);
+        Item tinOre = mine(tinRockID, tinOreID, tutorialConditions.tinOreMined, ctx);
         while (tinOre == null) {
-            tinOre = mine(tinRockID, tinOreID, ctx);
+            tinOre = mine(tinRockID, tinOreID, tutorialConditions.tinOreMined, ctx);
         }
 
         // Mine copper
         System.out.println("Mining copper");
-        Item copperOre = mine(copperRockID, copperOreID, ctx);
+        Item copperOre = mine(copperRockID, copperOreID, tutorialConditions.copperOreMined, ctx);
         while (copperOre == null) {
-            copperOre = mine(copperRockID, copperOreID, ctx);
+            copperOre = mine(copperRockID, copperOreID, tutorialConditions.copperOreMined, ctx);
         }
 
         // Smelt ore
@@ -61,12 +61,11 @@ public class MiningArea extends Task {
         }
 
         // Talk to mining instructor
-        talkTo(miningInstructor, ctx);
+        talkTo(true, miningInstructor, ctx);
         continueChat(ctx);
         tutorialComponents.continueItem.click();
         boolean readyToSmith = Condition.wait(tutorialConditions.readyToSmith, 300, 15);
         while (!readyToSmith) {
-            talkTo(miningInstructor, ctx);
             continueChat(ctx);
             tutorialComponents.continueItem.click();
             readyToSmith = Condition.wait(tutorialConditions.readyToSmith, 300, 15);
@@ -79,10 +78,10 @@ public class MiningArea extends Task {
             bronzeDagger = smith(anvilID, bronzeDaggerID, ctx);
         }
 
+        pathToArea(POST_MINING_AREA, ctx);
+
         // Open gate
         openDoor(true, COMBAT_DOOR, metalGateID, ctx);
-
-        pathToArea(POST_MINING_AREA, ctx);
 
         System.out.println("Mining area complete!");
     }

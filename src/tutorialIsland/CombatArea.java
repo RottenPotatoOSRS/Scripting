@@ -31,7 +31,7 @@ public class CombatArea extends Task {
 
         // Talk to vanakka
         Npc vanakka = getNpcWithID(vanakkaID, ctx);
-        talkTo(vanakka, ctx);
+        talkTo(true, vanakka, ctx);
         continueChat(ctx);
         boolean tabReady = Condition.wait(tutorialConditions.tabReady,300, 15);
         while (!tabReady) {
@@ -80,13 +80,12 @@ public class CombatArea extends Task {
         }
 
         // Talk to vannaka again
-        talkTo(vanakka, ctx);
+        talkTo(true, vanakka, ctx);
         continueChat(ctx);
-        boolean chatInvalid = Condition.wait(tutorialConditions.readyToRange, 300, 15);
-        while (!chatInvalid) {
-            talkTo(vanakka, ctx);
+        boolean readyToGear = Condition.wait(tutorialConditions.readyToGear, 300, 15);
+        while (!readyToGear) {
             continueChat(ctx);
-            chatInvalid = Condition.wait(tutorialConditions.readyToRange, 300, 15);
+            readyToGear = Condition.wait(tutorialConditions.readyToGear, 300, 15);
         }
 
         // Equip bronze sword and wooden shield
@@ -128,7 +127,7 @@ public class CombatArea extends Task {
         openDoor(true, VANNAKA_DOOR, combatGateID, ctx);
 
         // Talk to vanakka
-        talkTo(vanakka, ctx);
+        talkTo(true, vanakka, ctx);
         continueChat(ctx);
         boolean rangeReady = Condition.wait(tutorialConditions.rangeReady, 300, 15);
         while (!rangeReady) {
@@ -148,6 +147,7 @@ public class CombatArea extends Task {
 
         // Kill a rat
         System.out.println("Killing a rat");
+        ctx.camera.angle(350);
         attack(giantRatID, ctx);
 
         // Run to the end of the tunnel
@@ -155,7 +155,7 @@ public class CombatArea extends Task {
         Condition.wait(tutorialConditions.notInMotion);
 
         // Climb up the ladder
-        climbLadder(ladderUpID, LADDER_DOWN, BANK_LADDER, ctx);
+        climbLadder(true, ladderUpID, LADDER_UP, BANK_LADDER, ctx);
 
         System.out.println("Combat area complete!");
     }

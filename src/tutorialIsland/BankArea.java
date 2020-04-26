@@ -37,6 +37,7 @@ public class BankArea extends Task {
         bankBooth.interact("Use");
         boolean bankOpen = Condition.wait(tutorialConditions.bankOpen, 300, 15);
         while (!bankOpen) {
+            ctx.camera.turnTo(bankBooth);
             bankBooth.interact("Use");
             bankOpen = Condition.wait(tutorialConditions.bankOpen, 300, 15);
         }
@@ -74,7 +75,7 @@ public class BankArea extends Task {
 
         // Talk to the account guide
         Npc accountGuide = getNpcWithID(accountGuideID, ctx);
-        talkTo(accountGuide, ctx);
+        talkTo(true, accountGuide, ctx);
         continueChat(ctx);
         boolean tabReady = Condition.wait(tutorialConditions.tabReady, 300, 15);
         while (!tabReady) {
@@ -94,7 +95,7 @@ public class BankArea extends Task {
         }
 
         // Talk to the account guide again
-        talkTo(accountGuide, ctx);
+        talkTo(true, accountGuide, ctx);
         continueChat(ctx);
         boolean chatInvalid = Condition.wait(tutorialConditions.chatWindowInvalid, 300, 15);
         while (!chatInvalid) {

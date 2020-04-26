@@ -31,6 +31,11 @@ public class TutorialComponents extends ClientAccessor {
     public final Component wornEquipment         = ctx.widgets.component(Constants.EQUIPMENT_WIDGET, 1);
     public final Component weaponSlot            = ctx.widgets.component(Constants.EQUIPMENT_WIDGET, 17).component(1);
     public final Component windStrike            = ctx.widgets.component(Constants.SPELLBOOK_WIDGET, 6);
+    public final Component music                 = ctx.widgets.component(261, 1).component(3);
+    public final Component music0                = ctx.widgets.component(261, 1).component(38);
+    public final Component sound0                = ctx.widgets.component(261, 1).component(44);
+    public final Component area0                 = ctx.widgets.component(261, 1).component(50);
+
 
     public TutorialComponents(ClientContext ctx) {
         super(ctx);

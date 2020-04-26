@@ -80,6 +80,7 @@ public class HelperMethods {
          *          the Npc object we want to talk to
          */
     public static boolean talkTo(Npc npc, ClientContext ctx) {
+        if (npc.id() == -1) { return false; }
         System.out.println("Talking to ID " + npc.id() + " AKA " + npc.name());
         TutorialComponents tutorialComponents = new TutorialComponents(ctx);
 
@@ -90,12 +91,32 @@ public class HelperMethods {
         Callable<Boolean> talking = new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
-                return tutorialComponents.chatHeader.text().contains(npc.name());
+                return tutorialComponents.chatHeader.valid();
             }
         };
         Condition.wait(talking, 500, 10);
+        if (!tutorialComponents.chatHeader.text().contains(npc.name())) {
+		    ctx.chat.clickContinue();
+		    randomSleep(400, 800);
+	    }
 
         return tutorialComponents.chatHeader.text().contains(npc.name());
+    }
+
+    /**
+     * Talk to a specific npc and complete all no-input dialogue.
+     * @param npc the Npc object we want to talk to
+     * @param forced keep trying until we are talking
+     */
+    public static boolean talkTo(boolean forced, Npc npc, ClientContext ctx) {
+        if (!forced) { return talkTo(npc, ctx); }
+
+        boolean talked = talkTo(npc, ctx);
+        while (!talked) {
+            talked = talkTo(npc, ctx);
+        }
+
+        return true;
     }
 
     /**
@@ -129,8 +150,13 @@ public class HelperMethods {
      */
     public static boolean openDoor(int doorID, Tile[] area, ClientContext ctx) {
         GameObject door = ctx.objects.select().id(doorID).poll();
+
+        randomSleep(400, 800);
+        if (ctx.players.local().tile().distanceTo(door) > 4) {
+            ctx.movement.findPath(door).traverse();
+        }
         ctx.camera.turnTo(door);
-        boolean openedDoor = door.interact("Open");
+        door.interact("Open");
         randomSleep(1500, 3000);
 
         return areaContainsTile(area, ctx.players.local().tile(), ctx);
@@ -170,7 +196,7 @@ public class HelperMethods {
     }
 
     /**
-     * Tries to climb a ladder until successful
+     * Tries to climb a ladder
      * @param ladderID the ID of the ladder to climb
      * @param direction the direction to climb
      * @param destination the array of tiles we should end up at
@@ -260,7 +286,7 @@ public class HelperMethods {
 
         nearestFishingSpot.interact("Net");
         TutorialConditions tutorialConditions = new TutorialConditions(ctx);
-        Condition.wait(tutorialConditions.animation, 1000, 15);
+        Condition.wait(tutorialConditions.shrimpCaught, 500, 15);
 
         return getItemFromInventory(rawShrimpID, ctx);
     }
@@ -332,7 +358,7 @@ public class HelperMethods {
         ctx.camera.turnTo(tree);
         tree.interact("Chop down");
         TutorialConditions tutorialConditions = new TutorialConditions(ctx);
-        Condition.wait(tutorialConditions.animation, 1000, 10);
+        Condition.wait(tutorialConditions.treeChopped, 500, 15);
 
         return getItemFromInventory(logsID, ctx);
     }
@@ -365,14 +391,13 @@ public class HelperMethods {
         return fire;
     }
 
-    public static Item mine(int rockID, int oreID, ClientContext ctx) {
+    public static Item mine(int rockID, int oreID, Callable<Boolean> condition, ClientContext ctx) {
         GameObject rock = getNearestGameObject(rockID, ctx);
         ctx.camera.turnTo(rock);
         rock.interact("Mine");
         TutorialConditions tutorialConditions = new TutorialConditions(ctx);
         // TODO this does work lol?
-        Condition.wait(tutorialConditions.animation, 300, 15);
-        randomSleep(400, 1000);
+        Condition.wait(condition, 300, 15);
 
         return getItemFromInventory(oreID, ctx);
     }
@@ -382,9 +407,12 @@ public class HelperMethods {
      * @param shrimp the shrimp to cook
      * @param fire the fire to cook on
      */
-    public static void cook(Item shrimp, GameObject fire) {
+    public static Item cook(Item shrimp, GameObject fire, ClientContext ctx) {
         shrimp.interact("Use");
         fire.interact("Use", "Fire");
+        Item burntShrimp = getItemFromInventory(burntShrimpID, ctx);
+        if (burntShrimp != null) { return burntShrimp; }
+        else { return getItemFromInventory(cookedShrimpID, ctx); }
     }
 
     public static void attack(int npcID, ClientContext ctx) {
@@ -395,17 +423,21 @@ public class HelperMethods {
             }
         };
         Npc npc = ctx.npcs.select().id(npcID).nearest().select(healthNotVisible).poll();
+        ctx.camera.turnTo(npc);
         npc.interact("Attack");
         TutorialConditions tutorialConditions = new TutorialConditions(ctx);
-        boolean inCombat = Condition.wait(tutorialConditions.inCombat, 500, 10);
+        boolean inCombat = Condition.wait(tutorialConditions.inCombat, 250, 10);
         while (!inCombat) {
             npc = ctx.npcs.select().id(npcID).nearest().select(healthNotVisible).poll();
             npc.interact("Attack");
-            inCombat = Condition.wait(tutorialConditions.inCombat, 500, 10);
+            inCombat = Condition.wait(tutorialConditions.inCombat, 250, 10);
+            System.out.println("in combat: " + inCombat);
         }
+
         boolean npcKilled = Condition.wait(tutorialConditions.outOfCombat, 500, 10);
         while (!npcKilled) {
             npcKilled = Condition.wait(tutorialConditions.outOfCombat, 500, 10);
+            System.out.println("out of combat: " + npcKilled);
         }
     }
 
@@ -424,7 +456,8 @@ public class HelperMethods {
      * @param useThis the item to use
      * @param onThis the object to use the item on
      */
-    public static void useItemOnObject(Item useThis, GameObject onThis) {
+    public static void useItemOnObject(Item useThis, GameObject onThis, ClientContext ctx) {
+	ctx.camera.turnTo(onThis);
         useThis.interact("Use");
         onThis.interact("Use", onThis.name());
     }
