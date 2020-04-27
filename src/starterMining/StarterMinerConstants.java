@@ -8,6 +8,7 @@ import org.powerbot.script.rt4.ClientContext;
 import org.powerbot.script.rt4.ClientAccessor;
 
 import static starterMining.HelperMethods.createTilesFromCorners;
+import static starterMining.HelperMethods.generateRandomTile;
 
 public class StarterMinerConstants extends ClientAccessor {
 	// Item ids
@@ -16,16 +17,29 @@ public class StarterMinerConstants extends ClientAccessor {
 			new Tile(3231, 3215),
 			new Tile(3236, 3221)
 	);
-	public static final Tile[] area1 = starterMining.HelperMethods.createTilesFromCorners(new Tile(3251,3225), new Tile(3258,3229));
-	public static final Tile[] area2 = starterMining.HelperMethods.createTilesFromCorners(new Tile(3252,3248), new Tile(3257,3251));
-	public static final Tile[] area3 = starterMining.HelperMethods.createTilesFromCorners(new Tile(3239,3274), new Tile(3243,3280));
-	public static final Tile[] area4 = starterMining.HelperMethods.createTilesFromCorners(new Tile(3242,3308), new Tile(3247,3311));
-	public static final Tile[] area5 = starterMining.HelperMethods.createTilesFromCorners(new Tile(3270,3330), new Tile(3277,3334));
-	public static final Tile[] area6 = starterMining.HelperMethods.createTilesFromCorners(new Tile(3303,3348), new Tile(3307,3353));
-	public static final Tile[] area7 = starterMining.HelperMethods.createTilesFromCorners(new Tile(3284,3367), new Tile(3290,3370));
 
-	public static final Tile[] MINING_AREA = starterMining.HelperMethods.createTilesFromCorners(new Tile(3280,3361), new Tile(3292,3373));
 
+	public static Tile[] pathToMine = new Tile[]{
+			generateRandomTile(new Tile(3235, 3223)),
+			generateRandomTile(new Tile(3246, 3225)),
+			generateRandomTile(new Tile(3256, 3226)),
+			generateRandomTile(new Tile(3259, 3237)),
+			generateRandomTile(new Tile(3254, 3250)),
+			generateRandomTile(new Tile(3249, 3261)),
+			generateRandomTile(new Tile(3245, 3271)),
+			generateRandomTile(new Tile(3237, 3283)),
+			generateRandomTile(new Tile(3238, 3300)),
+			generateRandomTile(new Tile(3244, 3310)),
+			generateRandomTile(new Tile(3252, 3322)),
+			generateRandomTile(new Tile(3266, 3325)),
+			generateRandomTile(new Tile(3266, 3325)),
+			generateRandomTile(new Tile(3278, 3336)),
+			generateRandomTile(new Tile(3277, 3345)),
+			generateRandomTile(new Tile(3270, 3354)),
+			generateRandomTile(new Tile(3270, 3364)),
+			generateRandomTile(new Tile(3277, 3369)),
+			generateRandomTile(new Tile(3283, 3336))
+	};
 	public StarterMinerConstants(ClientContext ctx) {
 		super(ctx);
 	}

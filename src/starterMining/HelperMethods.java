@@ -54,6 +54,18 @@ public class HelperMethods {
 		return null;
 	}
 
+	public static Tile generateRandomTile(Tile tile) {
+		Tile[] tiles = new Tile[3];
+		int tileX = tile.x();
+		int tileY = tile.y();
+
+		tiles[0] = new Tile(tileX + 1, tileY);
+		tiles[1] = new Tile(tileX + 1, tileY + 1);
+		tiles[2] = new Tile(tileX, tileY + 1);
+
+		return new Area(tiles).getRandomTile();
+	}
+
 	public static Tile[] createTilesFromCorners(Tile southWest, Tile northEast) {
 		int left = southWest.x();
 		int right = northEast.x();
@@ -71,6 +83,10 @@ public class HelperMethods {
 			}
 		}
 		return tiles;
+	}
+
+	public static void pathToDestination(Tile[] tiles, ClientContext ctx) {
+		ctx.movement.newTilePath(tiles).traverse();
 	}
 
 	public static void pathToArea(Area area, ClientContext ctx) {
