@@ -36,7 +36,7 @@ public class CookingArea extends Task {
 
         // Talk to chef
         Npc chef = getNpcWithID(true, chefID, ctx);
-        talkTo(chef, ctx);
+        talkTo(true, chef, ctx);
         continueChat(ctx);
         boolean gotIngredients = Condition.wait(tutorialConditions.gotIngredients, 300, 10);
         while (!gotIngredients) {
@@ -58,15 +58,18 @@ public class CookingArea extends Task {
 
         Item dough = getItemFromInventory(doughID, ctx);
         GameObject range = getNearestGameObject(rangeID, ctx);
-        useItemOnObject(dough, range);
+        useItemOnObject(dough, range, ctx);
         boolean breadMade = Condition.wait(tutorialConditions.breadMade, 400, 10);
         while (!breadMade) {
-            useItemOnObject(dough, range);
+            useItemOnObject(dough, range, ctx);
             breadMade = Condition.wait(tutorialConditions.breadMade, 400, 10);
         }
         System.out.println("Bread made");
 
         // Open the door
+        pathToArea(INSIDE_COOKING_AREA, ctx);
+        ctx.camera.angle(35);
+	
         System.out.println("Opening door");
         openDoor(true, POST_COOKING_DOOR, cookingDoorOutID, ctx);
 

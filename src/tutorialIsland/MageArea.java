@@ -28,11 +28,12 @@ public class MageArea extends Task {
         System.out.println("Starting mage area");
 
         // Run to the mage
+        pathToArea(PRE_MAGE_AREA, ctx);
         pathToArea(MAGE_AREA, ctx);
 
         // Talk to mage instructor
         Npc mageInstructor = getNpcWithID(mageInstructorID, ctx);
-        talkTo(mageInstructor, ctx);
+        talkTo(true, mageInstructor, ctx);
         continueChat(ctx);
         boolean tabReady = Condition.wait(tutorialConditions.tabReady, 300, 15);
         while (!tabReady) {
@@ -52,7 +53,7 @@ public class MageArea extends Task {
         // inst header "magic interface"
 
         // Talk to instructor
-        talkTo(mageInstructor, ctx);
+        talkTo(true, mageInstructor, ctx);
         continueChat(ctx);
         boolean chatInvalid = Condition.wait(tutorialConditions.chatWindowInvalid, 300, 15);
         while (!chatInvalid) {
@@ -80,7 +81,7 @@ public class MageArea extends Task {
         }
 
         // Talk to instructor
-        talkTo(mageInstructor, ctx);
+        talkTo(true, mageInstructor, ctx);
         continueChat(ctx);
         boolean chatOptions = Condition.wait(tutorialConditions.chatOptions, 400, 10);
         while (!chatOptions) {
@@ -116,6 +117,7 @@ public class MageArea extends Task {
         continueChat(ctx);
         tutorialComponents.continueItem.click();
 
+        /*
         chatOptions = Condition.wait(tutorialConditions.chatOptions, 400, 10);
         while (!chatOptions) {
             continueChat(ctx);
@@ -123,6 +125,7 @@ public class MageArea extends Task {
         }
         ChatOption mainland = ctx.chat.select().text("Yes.").poll();
         mainland.select();
+        */
         System.out.println("Mage area completed!");
     }
 }

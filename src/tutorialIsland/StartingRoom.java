@@ -30,13 +30,12 @@ public class StartingRoom extends Task {
 
         // Find the Gielinor Guide
         Npc gielinorGuide = getNpcWithID(true, gielinorID, ctx);
-        talkTo(gielinorGuide, ctx);
+        talkTo(true, gielinorGuide, ctx);
         continueChat(ctx);
 
         String experienceOption = "I am an experienced player.";
         boolean chatOptions = Condition.wait(tutorialConditions.chatOptions, 500, 10);
         while (!chatOptions) {
-            talkTo(gielinorGuide, ctx);
             continueChat(ctx);
             chatOptions = Condition.wait(tutorialConditions.chatOptions, 500, 10);
         }
@@ -65,8 +64,18 @@ public class StartingRoom extends Task {
             tabClicked = Condition.wait(tutorialConditions.optionsClicked, 1000, 7);
         }
 
+        // Turn off sounds
+        tutorialComponents.music.click();
+        randomSleep(300, 600);
+        tutorialComponents.music0.click();
+        randomSleep(300, 600);
+        tutorialComponents.sound0.click();
+        randomSleep(300, 600);
+        tutorialComponents.area0.click();
+        randomSleep(300, 600);
+
         System.out.println("Options tab clicked!");
-        talkTo(gielinorGuide, ctx);
+        talkTo(true, gielinorGuide, ctx);
         continueChat(ctx);
         boolean chatInvalid = Condition.wait(tutorialConditions.chatWindowInvalid, 300, 15);
         while (!chatInvalid) {

@@ -8,7 +8,7 @@ import org.powerbot.script.rt4.ClientContext;
 import java.awt.*;
 import java.util.ArrayList;
 
-@Script.Manifest(name="Tutorial Island", description="Tutorial", properties="client=4; author=Chris; topic=999;")
+@Script.Manifest(name="Tutorial Island", description="Completes tutorial island on a fresh account.", properties="client=4; author=RottenPotato;")
 
 public class TutorialIsland extends PollingScript<ClientContext> implements PaintListener
 {

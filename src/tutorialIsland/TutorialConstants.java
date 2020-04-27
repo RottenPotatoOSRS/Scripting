@@ -90,6 +90,13 @@ public final class TutorialConstants extends ClientAccessor {
     };
 
     // Areas
+    public static final Area RESOURCE_AREA   = createAreaFromCorners(
+            new Tile(3097, 3093, 0),
+            new Tile(3105, 3098, 0)
+    );
+    public static final Area INSIDE_COOKING_AREA   = new Area(
+            new Tile(3073, 3090, 0)
+    );
     public static final Area OUTSIDE_COOKING_AREA   = createAreaFromCorners(
             new Tile(3079, 3080, 0),
             new Tile(3084, 3086, 0)
@@ -99,7 +106,7 @@ public final class TutorialConstants extends ClientAccessor {
             new Tile(3078, 3114, 0)
     );
     public static final Area PRE_QUEST_AREA2         = createAreaFromCorners(
-            new Tile(3077, 3126, 0),
+            new Tile(3081, 3127, 0),
             new Tile(3090, 3129, 0)
     );
     public static final Area MINING_AREA            = createAreaFromCorners(
@@ -123,8 +130,13 @@ public final class TutorialConstants extends ClientAccessor {
             new Tile(3128, 3110, 0)
     );
 
+    public static final Area PRE_MAGE_AREA              = createAreaFromCorners(
+            new Tile(3134, 3082, 0),
+            new Tile(3139, 3083, 0)
+    );
+
     public static final Area MAGE_AREA              = createAreaFromCorners(
-            new Tile(3134, 3083, 0),
+            new Tile(3139, 3083, 0),
             new Tile(3143, 3089, 0)
     );
 

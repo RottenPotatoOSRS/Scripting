@@ -30,12 +30,11 @@ public class PrayerArea extends Task {
         pathToArea(PRAYER_AREA, ctx);
 
         // Talk to brother brace
-        Npc brotherBrace = getNpcWithID(brotherBraceID, ctx);
-        talkTo(brotherBrace, ctx);
+        Npc brotherBrace = getNpcWithID(true, brotherBraceID, ctx);
+        talkTo(true, brotherBrace, ctx);
         continueChat(ctx);
         boolean tabReady = Condition.wait(tutorialConditions.tabReady, 300, 15);
         while (!tabReady) {
-            talkTo(brotherBrace, ctx);
             continueChat(ctx);
             tabReady = Condition.wait(tutorialConditions.tabReady, 300, 15);
         }
@@ -52,7 +51,7 @@ public class PrayerArea extends Task {
         // inst header "prayers"
 
         // Talk to brother brace
-        talkTo(brotherBrace, ctx);
+        talkTo(true, brotherBrace, ctx);
         continueChat(ctx);
         tabReady = Condition.wait(tutorialConditions.tabReady, 300, 15);
         while (!tabReady) {
@@ -72,7 +71,7 @@ public class PrayerArea extends Task {
         // inst header "friends"
 
         // Talk to brother brace
-        talkTo(brotherBrace, ctx);
+        talkTo(true, brotherBrace, ctx);
         continueChat(ctx);
         boolean chatInvalid = Condition.wait(tutorialConditions.chatWindowInvalid, 300, 15);
         while (!chatInvalid) {

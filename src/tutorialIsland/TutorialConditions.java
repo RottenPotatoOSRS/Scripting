@@ -8,6 +8,7 @@ import org.powerbot.script.rt4.Constants;
 import java.util.concurrent.Callable;
 
 import static tutorialIsland.TutorialConstants.*;
+import static tutorialIsland.HelperMethods.*;
 
 public class TutorialConditions extends ClientAccessor {
     TutorialComponents tutorialComponents = new TutorialComponents(ctx);
@@ -18,6 +19,38 @@ public class TutorialConditions extends ClientAccessor {
         public Boolean call() throws Exception {
             // -1 means no animation, i.e. player is not fishing
             return ctx.players.local().animation() != -1;
+        }
+    };
+
+    // Have we caught a shrimp?
+    Callable<Boolean> shrimpCaught = new Callable<Boolean>() {
+        @Override
+        public Boolean call() throws Exception {
+            return getItemFromInventory(rawShrimpID, ctx) != null;
+        }
+    };
+
+    // Have we chopped a log?
+    Callable<Boolean> treeChopped = new Callable<Boolean>() {
+        @Override
+        public Boolean call() throws Exception {
+            return getItemFromInventory(logsID, ctx) != null;
+        }
+    };
+
+    // Have we mined an ore?
+    Callable<Boolean> tinOreMined = new Callable<Boolean>() {
+        @Override
+        public Boolean call() throws Exception {
+            return getItemFromInventory(tinOreID, ctx) != null;
+        }
+    };
+
+    // Have we mined an ore?
+    Callable<Boolean> copperOreMined = new Callable<Boolean>() {
+        @Override
+        public Boolean call() throws Exception {
+            return getItemFromInventory(copperOreID, ctx) != null;
         }
     };
 
@@ -51,6 +84,14 @@ public class TutorialConditions extends ClientAccessor {
         @Override
         public Boolean call() throws Exception {
             return !tutorialComponents.chatHeader.valid();
+        }
+    };
+
+    // Are we ready to gear up?
+    Callable<Boolean> readyToGear = new Callable<Boolean>() {
+        @Override
+        public Boolean call() throws Exception {
+            return tutorialComponents.instructionsHeader.text().contains("sword and shield");
         }
     };
 
@@ -131,7 +172,8 @@ public class TutorialConditions extends ClientAccessor {
     Callable<Boolean> readyToMine = new Callable<Boolean>() {
         @Override
         public Boolean call() throws Exception {
-            return tutorialComponents.instructionsHeader.text().contains("tin");
+            return tutorialComponents.instructionsHeader.text().contains("tin") ||
+                    tutorialComponents.continueItem.valid();
         }
     };
 
@@ -172,7 +214,8 @@ public class TutorialConditions extends ClientAccessor {
     Callable<Boolean> shrimpCooked = new Callable<Boolean>() {
         @Override
         public Boolean call() throws Exception {
-            return (HelperMethods.getItemFromInventory(cookedShrimpID, ctx) != null);
+            return (getItemFromInventory(cookedShrimpID, ctx) != null ||
+                    getItemFromInventory(burntShrimpID, ctx) != null);
         }
     };
 
@@ -180,7 +223,7 @@ public class TutorialConditions extends ClientAccessor {
     Callable<Boolean> breadMade = new Callable<Boolean>() {
         @Override
         public Boolean call() throws Exception {
-            return (HelperMethods.getItemFromInventory(breadID, ctx) != null);
+            return (getItemFromInventory(breadID, ctx) != null);
         }
     };
 
@@ -268,8 +311,7 @@ public class TutorialConditions extends ClientAccessor {
     Callable<Boolean> daggerEquipped = new Callable<Boolean>() {
         @Override
         public Boolean call() throws Exception {
-            System.out.println(tutorialComponents.weaponSlot.itemId());
-            return tutorialComponents.weaponSlot.itemId() == bronzeDaggerID;
+            return getItemFromInventory(bronzeDaggerID, ctx) == null;
         }
     };
 

@@ -38,7 +38,7 @@ public class QuestArea extends Task {
 
         // Talk to quest guide
         Npc questGuide = getNpcWithID(questGuideID, ctx);
-        talkTo(questGuide, ctx);
+        talkTo(true, questGuide, ctx);
         continueChat(ctx);
         boolean tabReady = Condition.wait(tutorialConditions.tabReady, 300, 15);
         while (!tabReady) {
@@ -59,7 +59,7 @@ public class QuestArea extends Task {
         // "every quest" instructions header
 
         // Talk to quest guide
-        talkTo(questGuide, ctx);
+        talkTo(true, questGuide, ctx);
         continueChat(ctx);
         tutorialComponents.continueItem.click();
         boolean ladderReady = Condition.wait(tutorialConditions.ladderReady, 300, 15);
