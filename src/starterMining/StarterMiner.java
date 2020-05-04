@@ -2,6 +2,7 @@ package starterMining;
 
 import org.powerbot.script.*;
 import org.powerbot.script.rt4.ClientContext;
+import org.powerbot.script.rt4.Game;
 import osrs.Task;
 
 import java.awt.*;
@@ -18,6 +19,8 @@ public class StarterMiner extends PollingScript<ClientContext> implements PaintL
 	@Override
 	public void start() {
 		turnOnShiftDrop(ctx);
+		ctx.game.tab(Game.Tab.INVENTORY);
+		tasks.add(new Antiban(ctx));
 		tasks.add(new ContinueChat(ctx));
 		tasks.add(new EquipPickaxe(ctx));
 		tasks.add(new Drop(ctx));
